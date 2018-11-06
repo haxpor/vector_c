@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -std=c99 -Wall -I. -I/usr/local/include/SDL2
+CFLAGS = -std=c99 -Wall -I.
 TARGETS_DOT = \
 	  vectorDot.o \
 	  vectorDot_test.o \
