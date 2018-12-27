@@ -134,6 +134,23 @@ int main(int argc, char* argv[])
   myStruct elem = *(myStruct*)vector_get(vGeneral, vGeneral->len-2);
   printf("pre-last element: %d,%f,%s\n", elem.integerValue, elem.floatValue, elem.nameValue);
 
+  // clear all elements
+  printf("gonna clear all elements now\n");
+  vector_clear(vGeneral);
+  printElements(vGeneral);
+
+  // add a new element
+  {
+  myStruct newStruct;
+  newStruct.integerValue = 12;
+  newStruct.floatValue = 13.0;
+  const char* str_value = "I'm struct 7";
+  strncpy(newStruct.nameValue, str_value, strlen(str_value));
+  newStruct.refIntegerValue = &outside_referenced;
+  vector_add(vGeneral, (void*)(&newStruct));
+  printElements(vGeneral);
+  }
+
   // free vGeneral
   vector_free(vGeneral);
 

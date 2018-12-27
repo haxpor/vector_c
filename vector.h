@@ -58,6 +58,13 @@ extern void vector_remove(vector* v, int i);
 // return general purpose data
 extern void* vector_get(vector* v, int i);
 
+///
+/// Clear all elements inside this vector
+///
+/// \param vector Pointer to vector
+///
+extern void vector_clear(vector* v);
+
 // free vector from memory
 // after calling this function, vector will be freed and set to NULL.
 extern void vector_free(vector*);

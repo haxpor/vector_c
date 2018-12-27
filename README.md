@@ -27,6 +27,8 @@ See example code at `vector_test.c`.
 This one will do deep copy for input data, so it won't be mess or broken when you change input data from outside, it's separate.
 It also accepts custom memory freeing function if your element needs a proper memory care. Just set its `free_element` function pointer to yours in `free_element(void* element)` signature.
 
+When using `vector_clear()` it will shrink down allocated memory to only 1 element waiting to be filled, and will expand again if there's new element added.
+
 # License
 
 [MIT](https://github.com/haxpor/vector_c/blob/master/LICENSE), Wasin Thonkaew

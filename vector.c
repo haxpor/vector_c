@@ -4,7 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-vector* vector_createNew(int estimatedLen, int stride) {
+vector* vector_createNew(int estimatedLen, int stride)
+{
   assert(estimatedLen > 0);
   assert(stride > 0);
 
@@ -23,16 +24,13 @@ vector* vector_createNew(int estimatedLen, int stride) {
   return out;
 }
 
-void vector_add(vector* v, void* d) {
+void vector_add(vector* v, void* d)
+{
   assert(v != NULL);
   assert(d != NULL);
 
   // if there is still space left to fill
   if (v->len < v->mlen) {
-    // this has problem as it just hold the address referenc to source data not its content
-    // if there's something going on with source data outside of this vector struct's control
-    // we have stored mess data
-    //*(v->buffer + v->len) = d;
     // do memory copy from source to our buffer
     memcpy(v->buffer + v->len*v->stride, d, v->stride);
     v->len++;
@@ -42,13 +40,13 @@ void vector_add(vector* v, void* d) {
   else {
     v->buffer = realloc(v->buffer, (v->mlen + 1)*v->stride); 
     v->mlen++;
-    //v->buffer[v->len] = d;
     memcpy(v->buffer + v->len*v->stride, d, v->stride);
     v->len++;
   }
 }
 
-void vector_remove(vector* v, int i) {
+void vector_remove(vector* v, int i)
+{
   assert(v != NULL);
   assert(i < v->len);
 
@@ -72,14 +70,42 @@ void vector_remove(vector* v, int i) {
   v->len--;
 }
 
-void* vector_get(vector* v, int i) {
+void* vector_get(vector* v, int i)
+{
   assert(v != NULL);
   assert(i < v->len);
 
   return v->buffer + i*v->stride;
 }
 
-void vector_free(vector* v) {
+void vector_clear(vector* v)
+{
+  // only make sense if we do this operation when there's at least 1 element inside
+  if (v->len > 0)
+  {
+    // if need to do custom memory freeing for element, then do it
+    if (v->free_element != NULL)
+    {
+      // do it for all element
+      for (int i=0; i<v->len; i++)
+      {
+        v->free_element(v->buffer + i*v->stride);
+      }
+    }
+
+    // write 0 for all allocated memory (for safety)
+    memset(v->buffer, 0, v->len*v->stride);
+
+    // now all elements are not making sense if we still access it
+    v->len = 0;
+    // shirnk data down, set back to estimated number of element of 1
+    v->mlen = 1;
+    v->buffer = realloc(v->buffer, v->mlen*v->stride);
+  }
+}
+
+void vector_free(vector* v)
+{
   assert(v != NULL);
 
   // do custom memory freeing for all elements
