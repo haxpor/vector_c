@@ -20,7 +20,15 @@ struct vector
   int stride;
 
   /// buffer pointer to hold all data
-  void** buffer;
+  void* buffer;
+
+  /// free element function
+  /// if you have custom element that need to have a proper memory freeing
+  /// you can set it here, otherwise it won't have any effect and its buffer's memory chunk
+  /// will be normally freed
+  ///
+  /// input is `void* element`, you can cast it to your type then do things properly.
+  void (*free_element)(void* element);
 };
 typedef struct vector vector;
 

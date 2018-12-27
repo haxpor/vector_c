@@ -1,35 +1,58 @@
 // test code for vector
 #include <stdio.h>
 #include "vector.h"
+#include <string.h>
+
+#define STRING_BUFFER 255+1
 
 struct myStruct {
   int integerValue;
   float floatValue;
+  char nameValue[STRING_BUFFER];
 };
 typedef struct myStruct myStruct;
 
-vector* vGeneral;
+vector* vGeneral = NULL;
 
 void printElements(vector* v) {
-  printf("struct info: len=>%d, mlen=>%d\n", v->len, v->mlen);
+  printf("struct info: len=%d, mlen=%d\n", v->len, v->mlen);
 
-  myStruct tempStruct;
+  myStruct* tempStruct = NULL;
   for (int i=0; i<v->len; i++) {
     // convert to myStruct
-    tempStruct = *(myStruct*)(v->buffer[i]);
-    printf("element %d: %d, %f\n", i, tempStruct.integerValue, tempStruct.floatValue);
+    tempStruct = (myStruct*)(v->buffer + i*v->stride);
+    printf("element %d: %d, %f, %s\n", i, tempStruct->integerValue, tempStruct->floatValue, tempStruct->nameValue);
   }
+}
+
+void custom_free_element(void* element)
+{
+  // cast to myStruct
+  myStruct* casted_element = (myStruct*)element;
+
+  printf("before free_element on struct {integerValue: %d, floatValue: %f, nameValue: %s}\n", casted_element->integerValue, casted_element->floatValue, casted_element->nameValue);
+
+  // do memory clearing task
+  casted_element->integerValue = 0;
+  casted_element->floatValue = 0.f;
+  memset(casted_element->nameValue, 0, STRING_BUFFER);
+
+  printf("after free_element on struct {integerValue: %d, floatValue: %f, nameValue: %s}\n", casted_element->integerValue, casted_element->floatValue, casted_element->nameValue);
 }
 
 int main(int argc, char* argv[])
 {
   vGeneral = vector_createNew(5, sizeof(myStruct));
+  // set freeing memory for each element
+  vGeneral->free_element = custom_free_element;
 
   // add a new element
   {
   myStruct newStruct;
   newStruct.integerValue = 1;
   newStruct.floatValue = 2.0;
+  const char* str_value = "I'm struct 1";
+  strncpy(newStruct.nameValue, str_value, strlen(str_value));
   vector_add(vGeneral, (void*)(&newStruct));
   printElements(vGeneral);
   }
@@ -39,6 +62,8 @@ int main(int argc, char* argv[])
   myStruct newStruct;
   newStruct.integerValue = 3;
   newStruct.floatValue = 4.0;
+  const char* str_value = "I'm struct 2";
+  strncpy(newStruct.nameValue, str_value, strlen(str_value));
   vector_add(vGeneral, (void*)(&newStruct));
   printElements(vGeneral);
   }
@@ -48,6 +73,8 @@ int main(int argc, char* argv[])
   myStruct newStruct;
   newStruct.integerValue = 5;
   newStruct.floatValue = 6.0;
+  const char* str_value = "I'm struct 3";
+  strncpy(newStruct.nameValue, str_value, strlen(str_value));
   vector_add(vGeneral, (void*)(&newStruct));
   printElements(vGeneral);
   }
@@ -57,6 +84,8 @@ int main(int argc, char* argv[])
   myStruct newStruct;
   newStruct.integerValue = 7;
   newStruct.floatValue = 8.0;
+  const char* str_value = "I'm struct 4";
+  strncpy(newStruct.nameValue, str_value, strlen(str_value));
   vector_add(vGeneral, (void*)(&newStruct));
   printElements(vGeneral);
   }
@@ -66,6 +95,8 @@ int main(int argc, char* argv[])
   myStruct newStruct;
   newStruct.integerValue = 9;
   newStruct.floatValue = 10.0;
+  const char* str_value = "I'm struct 5";
+  strncpy(newStruct.nameValue, str_value, strlen(str_value));
   vector_add(vGeneral, (void*)(&newStruct));
   printElements(vGeneral);
   }
@@ -75,6 +106,8 @@ int main(int argc, char* argv[])
   myStruct newStruct;
   newStruct.integerValue = 11;
   newStruct.floatValue = 12.0;
+  const char* str_value = "I'm struct 6";
+  strncpy(newStruct.nameValue, str_value, strlen(str_value));
   vector_add(vGeneral, (void*)(&newStruct));
   printElements(vGeneral);
   }
@@ -85,10 +118,10 @@ int main(int argc, char* argv[])
 
   // get before last element
   myStruct elem = *(myStruct*)vector_get(vGeneral, vGeneral->len-2);
-  printf("pre-last element: %d,%f\n", elem.integerValue, elem.floatValue);
+  printf("pre-last element: %d,%f,%s\n", elem.integerValue, elem.floatValue, elem.nameValue);
 
   // free vGeneral
-  //vector_free(vGeneral);
+  vector_free(vGeneral);
 
   return 0;
 }
