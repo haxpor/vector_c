@@ -47,7 +47,7 @@ void custom_free_element(void* element)
 
 int main(int argc, char* argv[])
 {
-  vGeneral = vector_createNew(5, sizeof(myStruct));
+  vGeneral = vector_new(5, sizeof(myStruct));
   // set freeing memory for each element
   vGeneral->free_element = custom_free_element;
 

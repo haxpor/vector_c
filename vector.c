@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-vector* vector_createNew(int estimatedLen, int stride)
+vector* vector_new(int estimatedLen, int stride)
 {
   assert(estimatedLen > 0);
   assert(stride > 0);

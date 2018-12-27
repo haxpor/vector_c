@@ -36,7 +36,7 @@ typedef struct vector vector;
 //
 // estimated_len - length of estimated element to be added in the future use
 // stride - size of individual element
-extern vector* vector_createNew(int estimatedLen, int stride);
+extern vector* vector_new(int estimatedLen, int stride);
 
 // add a new element to vector
 //
