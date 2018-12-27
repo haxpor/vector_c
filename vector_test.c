@@ -9,10 +9,14 @@ struct myStruct {
   int integerValue;
   float floatValue;
   char nameValue[STRING_BUFFER];
+  int* refIntegerValue;
 };
 typedef struct myStruct myStruct;
 
 vector* vGeneral = NULL;
+// integer that is referenced by myStruct
+// this is to prove that deep copy for pointer type works
+int outside_referenced = 999;
 
 void printElements(vector* v) {
   printf("struct info: len=%d, mlen=%d\n", v->len, v->mlen);
@@ -21,7 +25,7 @@ void printElements(vector* v) {
   for (int i=0; i<v->len; i++) {
     // convert to myStruct
     tempStruct = (myStruct*)(v->buffer + i*v->stride);
-    printf("element %d: %d, %f, %s\n", i, tempStruct->integerValue, tempStruct->floatValue, tempStruct->nameValue);
+    printf("element %d: %d, %f, %s, %d\n", i, tempStruct->integerValue, tempStruct->floatValue, tempStruct->nameValue, *tempStruct->refIntegerValue);
   }
 }
 
@@ -30,14 +34,15 @@ void custom_free_element(void* element)
   // cast to myStruct
   myStruct* casted_element = (myStruct*)element;
 
-  printf("before free_element on struct {integerValue: %d, floatValue: %f, nameValue: %s}\n", casted_element->integerValue, casted_element->floatValue, casted_element->nameValue);
+  printf("before free_element on struct {integerValue: %d, floatValue: %f, nameValue: %s, refIntegerValue address: %p}\n", casted_element->integerValue, casted_element->floatValue, casted_element->nameValue, casted_element->refIntegerValue);
 
   // do memory clearing task
   casted_element->integerValue = 0;
   casted_element->floatValue = 0.f;
   memset(casted_element->nameValue, 0, STRING_BUFFER);
+  casted_element->refIntegerValue = NULL;
 
-  printf("after free_element on struct {integerValue: %d, floatValue: %f, nameValue: %s}\n", casted_element->integerValue, casted_element->floatValue, casted_element->nameValue);
+  printf("after free_element on struct {integerValue: %d, floatValue: %f, nameValue: %s, refIntegerValue address: %p}\n", casted_element->integerValue, casted_element->floatValue, casted_element->nameValue, casted_element->refIntegerValue);
 }
 
 int main(int argc, char* argv[])
@@ -53,6 +58,7 @@ int main(int argc, char* argv[])
   newStruct.floatValue = 2.0;
   const char* str_value = "I'm struct 1";
   strncpy(newStruct.nameValue, str_value, strlen(str_value));
+  newStruct.refIntegerValue = &outside_referenced;
   vector_add(vGeneral, (void*)(&newStruct));
   printElements(vGeneral);
   }
@@ -64,6 +70,7 @@ int main(int argc, char* argv[])
   newStruct.floatValue = 4.0;
   const char* str_value = "I'm struct 2";
   strncpy(newStruct.nameValue, str_value, strlen(str_value));
+  newStruct.refIntegerValue = &outside_referenced;
   vector_add(vGeneral, (void*)(&newStruct));
   printElements(vGeneral);
   }
@@ -75,6 +82,7 @@ int main(int argc, char* argv[])
   newStruct.floatValue = 6.0;
   const char* str_value = "I'm struct 3";
   strncpy(newStruct.nameValue, str_value, strlen(str_value));
+  newStruct.refIntegerValue = &outside_referenced;
   vector_add(vGeneral, (void*)(&newStruct));
   printElements(vGeneral);
   }
@@ -86,6 +94,7 @@ int main(int argc, char* argv[])
   newStruct.floatValue = 8.0;
   const char* str_value = "I'm struct 4";
   strncpy(newStruct.nameValue, str_value, strlen(str_value));
+  newStruct.refIntegerValue = &outside_referenced;
   vector_add(vGeneral, (void*)(&newStruct));
   printElements(vGeneral);
   }
@@ -97,9 +106,13 @@ int main(int argc, char* argv[])
   newStruct.floatValue = 10.0;
   const char* str_value = "I'm struct 5";
   strncpy(newStruct.nameValue, str_value, strlen(str_value));
+  newStruct.refIntegerValue = &outside_referenced;
   vector_add(vGeneral, (void*)(&newStruct));
   printElements(vGeneral);
   }
+
+  // modify outside value
+  outside_referenced = -999;
 
   // add a new element
   {
@@ -108,6 +121,7 @@ int main(int argc, char* argv[])
   newStruct.floatValue = 12.0;
   const char* str_value = "I'm struct 6";
   strncpy(newStruct.nameValue, str_value, strlen(str_value));
+  newStruct.refIntegerValue = &outside_referenced;
   vector_add(vGeneral, (void*)(&newStruct));
   printElements(vGeneral);
   }
