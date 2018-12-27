@@ -24,7 +24,8 @@ This type passes by value.
 Use `vector.h` and `vector.c` to integrate with your main source code.  
 See example code at `vector_test.c`.
 
-General purpose always passes by reference.
+This one will do deep copy for input data, so it won't be mess or broken when you change input data from outside, it's separate.
+It also accepts custom memory freeing function if your element needs a proper memory care. Just set its `free_element` function pointer to yours in `free_element(void* element)` signature.
 
 # License
 
