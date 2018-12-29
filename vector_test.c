@@ -127,7 +127,13 @@ int main(int argc, char* argv[])
   }
 
   // remove 2nd element
+  printf("Remove 2nd element\n");
   vector_remove(vGeneral, 1);
+  printElements(vGeneral);
+
+  // remove last element
+  printf("Remove last element\n");
+  vector_remove(vGeneral, vGeneral->len-1);
   printElements(vGeneral);
 
   // get before last element

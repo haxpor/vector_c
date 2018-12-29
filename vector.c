@@ -55,14 +55,21 @@ void vector_remove(vector* v, int i)
   {
     v->free_element(v->buffer + i*v->stride);
   }
-  
-  // shift element as one has been removed
-  for (int index=i; index<v->len-1; index++) {
-    memcpy(v->buffer + index*v->stride, v->buffer + (index+1)*v->stride, v->stride);
-  }
 
-  // write 0 for stride size for last element
-  memset(v->buffer + (v->len-1)*v->stride, 0, v->stride);
+  // we can do the whole memory shift
+  if (i+1 < v->len)
+  {
+    // move the whole memory chunk to the left
+    // use memmove as memory between destination and source overlap
+    memmove(v->buffer + i*v->stride, v->buffer + (i+1)*v->stride, (v->len - i - 1) * v->stride);
+    // set zero to the last element
+    memset(v->buffer + (v->len - 1)*v->stride, 0, v->stride);
+  }
+  // otherwise we just need to zero last element's memory
+  else
+  {
+    memset(v->buffer + i*v->stride, 0, v->stride);
+  }
 
   // update len
   // note: don't decrement mlen, we will only grow not shrink.
