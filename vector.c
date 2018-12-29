@@ -60,8 +60,8 @@ void vector_remove(vector* v, int i)
   if (i+1 < v->len)
   {
     // move the whole memory chunk to the left
-    // use memmove as memory between destination and source overlap
-    memmove(v->buffer + i*v->stride, v->buffer + (i+1)*v->stride, (v->len - i - 1) * v->stride);
+    // source and destination does not overlap, no need to use memmove here
+    memcpy(v->buffer + i*v->stride, v->buffer + (i+1)*v->stride, (v->len - i - 1) * v->stride);
     // set zero to the last element
     memset(v->buffer + (v->len - 1)*v->stride, 0, v->stride);
   }
