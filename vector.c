@@ -145,3 +145,16 @@ void vector_free(vector* v)
   free(v);
   v = NULL;
 }
+
+void vector_shrink_to_fit(vector* v)
+{
+  // if current managed length is more than the current element length
+  // then we need to shrink
+  if (v->mlen > v->len && v->len > 0)
+  {
+    // shrink down
+    v->buffer = realloc(v->buffer, v->len * v->stride);   
+    // update the number of elements
+    v->mlen = v->len;
+  }
+}

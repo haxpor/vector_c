@@ -80,4 +80,10 @@ extern void vector_clear(vector* v);
 ///
 extern void vector_free(vector* v);
 
+/// shrink allocated memory down to current number of elements that vector has
+///
+/// \param v pointer to vector
+///
+extern void vector_shrink_to_fit(vector* v);
+
 #endif /* vector_h_ */
