@@ -1,5 +1,4 @@
 *.o
-vector
-vectorDot
+vector_test
 *.swp
 *.swo
