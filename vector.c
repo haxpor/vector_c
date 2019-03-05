@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+
+// increasing factor when vector needs to expand memory space
+#define INC_ELEM_FACTOR 1.5
 
 vector* vector_new(int estimatedLen, int stride)
 {
@@ -37,10 +41,12 @@ void vector_add(vector* v, void* d)
     v->len++;
   }
   // otherwise it need to allocate more space
-  // only allocate more by 1 element
+  // increase memory space by INC_ELEM_FACTOR of current element count
   else {
-    v->buffer = realloc(v->buffer, (v->mlen + 1)*v->stride); 
-    v->mlen++;
+    // mlen or len, no matter now, they are equal
+    v->mlen = lroundf(v->mlen * INC_ELEM_FACTOR);
+    v->buffer = realloc(v->buffer, v->mlen*v->stride); 
+    // add a new element
     memcpy(v->buffer + v->len*v->stride, d, v->stride);
     v->len++;
   }
