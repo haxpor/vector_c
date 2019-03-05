@@ -12,7 +12,7 @@ TARGETS_LINK = $(filter-out vector_test, $(TARGETS))
 
 all: $(TARGETS)
 
-vector.o: vector.c
+vector.o: vector.c vector.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 vector_test.o: vector_test.c
