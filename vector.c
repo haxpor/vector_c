@@ -1,13 +1,17 @@
 #include "vector.h"
-#include "common_debug.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
+
+// increasing factor when vector needs to expand memory space
+#define INC_ELEM_FACTOR 1.5
 
 vector* vector_new(int estimatedLen, int stride)
 {
-  assert(estimatedLen > 0);
-  assert(stride > 0);
+  // it should satisfy
+  // 1. estimatedLen > 0
+  // 2. stride > 0
 
   // create vector
   vector* out = malloc(sizeof(vector));
@@ -26,8 +30,9 @@ vector* vector_new(int estimatedLen, int stride)
 
 void vector_add(vector* v, void* d)
 {
-  assert(v != NULL);
-  assert(d != NULL);
+  // it should satisfy
+  // 1. v != NULL
+  // 2. d != NULL
 
   // if there is still space left to fill
   if (v->len < v->mlen) {
@@ -36,10 +41,12 @@ void vector_add(vector* v, void* d)
     v->len++;
   }
   // otherwise it need to allocate more space
-  // only allocate more by 1 element
+  // increase memory space by INC_ELEM_FACTOR of current element count
   else {
-    v->buffer = realloc(v->buffer, (v->mlen + 1)*v->stride); 
-    v->mlen++;
+    // mlen or len, no matter now, they are equal
+    v->mlen = lroundf(v->mlen * INC_ELEM_FACTOR);
+    v->buffer = realloc(v->buffer, v->mlen*v->stride); 
+    // add a new element
     memcpy(v->buffer + v->len*v->stride, d, v->stride);
     v->len++;
   }
@@ -47,8 +54,9 @@ void vector_add(vector* v, void* d)
 
 void vector_remove(vector* v, int i)
 {
-  assert(v != NULL);
-  assert(i < v->len);
+  // it should satisfy
+  // 1. v != NULL
+  // 2. i < v->len
 
   // do custom memory freeing if user supply such function
   if (v->free_element != NULL)
@@ -79,8 +87,9 @@ void vector_remove(vector* v, int i)
 
 void* vector_get(vector* v, int i)
 {
-  assert(v != NULL);
-  assert(i < v->len);
+  // it should satisfy
+  // 1. v != NULL
+  // 2. i < v->len
 
   return v->buffer + i*v->stride;
 }
@@ -113,7 +122,8 @@ void vector_clear(vector* v)
 
 void vector_free(vector* v)
 {
-  assert(v != NULL);
+  // it should satisfy
+  // 1. v != NULL
 
   // do custom memory freeing for all elements
   // if user supplies with such function
@@ -134,4 +144,17 @@ void vector_free(vector* v)
   // free the source
   free(v);
   v = NULL;
+}
+
+void vector_shrink_to_fit(vector* v)
+{
+  // if current managed length is more than the current element length
+  // then we need to shrink
+  if (v->mlen > v->len && v->len > 0)
+  {
+    // shrink down
+    v->buffer = realloc(v->buffer, v->len * v->stride);   
+    // update the number of elements
+    v->mlen = v->len;
+  }
 }

@@ -140,10 +140,20 @@ int main(int argc, char* argv[])
   myStruct elem = *(myStruct*)vector_get(vGeneral, vGeneral->len-2);
   printf("pre-last element: %d,%f,%s\n", elem.integerValue, elem.floatValue, elem.nameValue);
 
+	// shrink to fit
+	printf("Shrink to fit\n");
+	vector_shrink_to_fit(vGeneral);
+	printElements(vGeneral);
+
   // clear all elements
   printf("gonna clear all elements now\n");
   vector_clear(vGeneral);
   printElements(vGeneral);
+
+	// shrink to fit (should not take into effect)
+	printf("Shrink to fit (should not take into effect)\n");
+	vector_shrink_to_fit(vGeneral);
+	printElements(vGeneral);
 
   // add a new element
   {
