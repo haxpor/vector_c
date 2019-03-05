@@ -1,13 +1,13 @@
 #include "vector.h"
-#include "common_debug.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 vector* vector_new(int estimatedLen, int stride)
 {
-  assert(estimatedLen > 0);
-  assert(stride > 0);
+  // it should satisfy
+  // 1. estimatedLen > 0
+  // 2. stride > 0
 
   // create vector
   vector* out = malloc(sizeof(vector));
@@ -26,8 +26,9 @@ vector* vector_new(int estimatedLen, int stride)
 
 void vector_add(vector* v, void* d)
 {
-  assert(v != NULL);
-  assert(d != NULL);
+  // it should satisfy
+  // 1. v != NULL
+  // 2. d != NULL
 
   // if there is still space left to fill
   if (v->len < v->mlen) {
@@ -47,8 +48,9 @@ void vector_add(vector* v, void* d)
 
 void vector_remove(vector* v, int i)
 {
-  assert(v != NULL);
-  assert(i < v->len);
+  // it should satisfy
+  // 1. v != NULL
+  // 2. i < v->len
 
   // do custom memory freeing if user supply such function
   if (v->free_element != NULL)
@@ -79,8 +81,9 @@ void vector_remove(vector* v, int i)
 
 void* vector_get(vector* v, int i)
 {
-  assert(v != NULL);
-  assert(i < v->len);
+  // it should satisfy
+  // 1. v != NULL
+  // 2. i < v->len
 
   return v->buffer + i*v->stride;
 }
@@ -113,7 +116,8 @@ void vector_clear(vector* v)
 
 void vector_free(vector* v)
 {
-  assert(v != NULL);
+  // it should satisfy
+  // 1. v != NULL
 
   // do custom memory freeing for all elements
   // if user supplies with such function
