@@ -9,6 +9,7 @@ It allocate more memory space to reduce calling to expensive call to `realloc()`
 
 It's based on autotools. Execute the following
 
+* `./autogen.sh`
 * `./configure`
 * `make`
 * (optional) `make check`
