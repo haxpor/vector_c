@@ -1,6 +1,6 @@
 // test code for vector
 #include <stdio.h>
-#include "vector.h"
+#include "vector/vector.h"
 #include <string.h>
 
 #define STRING_BUFFER 255+1
