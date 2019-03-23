@@ -7,10 +7,12 @@ It allocate more memory space to reduce calling to expensive call to `realloc()`
 
 # Build & Run
 
-Build the project with `make`.  
-You will see two executable file `vector_test`.
+It's based on autotools. Execute the following
 
-Clean with `make clean`.
+* `./configure`
+* `make`
+* (optional) `make check`
+* `make install` - will install both static, shared library included header files to your system
 
 # Note
 
