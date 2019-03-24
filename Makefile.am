@@ -7,6 +7,8 @@ lib_LTLIBRARIES = libvector.la
 libvector_la_CFLAGS = -I./include
 libvector_la_LDFLAGS = -no-undefined -version-info 0:1:0
 
+EXTRA_DIST = README.md LICENSE autogen.sh
+
 vectordir=$(includedir)/vector
 vector_HEADERS = include/vector/vector.h
 
