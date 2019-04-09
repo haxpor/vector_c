@@ -6,6 +6,10 @@
 #ifndef vector_h_
 #define vector_h_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 // our vector type
 struct vector
 {
@@ -85,5 +89,9 @@ extern void vector_free(vector* v);
 /// \param v pointer to vector
 ///
 extern void vector_shrink_to_fit(vector* v);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* vector_h_ */
