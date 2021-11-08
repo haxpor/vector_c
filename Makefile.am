@@ -4,7 +4,8 @@ AUTOMAKE_OPTIONS = serial-tests
 AM_CFLAGS = -Wall	\
 			-Wextra \
 			-pedantic \
-			-std=c99
+			-std=c99 \
+			-O2
 
 lib_LTLIBRARIES = libvector.la
 libvector_la_CFLAGS = -I./include
@@ -22,6 +23,8 @@ check_PROGRAMS = test/tests
 TESTS = $(check_PROGRAMS)
 test_tests_SOURCES = test/test_vector.c
 
-test_tests_CFLAGS = -I./include
+test_tests_CFLAGS = -I./include \
+					-std=c99 \
+					-O2
 test_tests_LDFLAGS = -lm \
 					 -lvector
