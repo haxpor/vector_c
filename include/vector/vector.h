@@ -67,6 +67,8 @@ extern void vector_remove(vector* v, int i);
 ///
 /// \param v pointer to vector
 /// \param i index to get element from
+/// \return Pointer to the element at index i, if such index is out of range then
+///         return NULL.
 ///
 extern void* vector_get(vector* v, int i);
 
