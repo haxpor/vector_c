@@ -1,11 +1,14 @@
 ACLOCAL_AMFLAGS = -I m4
+AUTOMAKE_OPTIONS = serial-tests
 
 AM_CFLAGS = -Wall	\
-						-std=c99
+			-Wextra \
+			-pedantic \
+			-std=c99
 
 lib_LTLIBRARIES = libvector.la
 libvector_la_CFLAGS = -I./include
-libvector_la_LDFLAGS = -no-undefined -version-info 0:1:0
+libvector_la_LDFLAGS = -no-undefined -version-info 1:0:0
 
 EXTRA_DIST = README.md LICENSE autogen.sh
 
@@ -21,4 +24,4 @@ test_tests_SOURCES = test/test_vector.c
 
 test_tests_CFLAGS = -I./include
 test_tests_LDFLAGS = -lm \
-										 -lvector
+					 -lvector
