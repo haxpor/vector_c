@@ -1,5 +1,5 @@
 AC_PREREQ([2.69])
-AC_INIT([vector], [1.0.0], [haxpor@gmail.com])
+AC_INIT([vector_c], [1.0.0], [haxpor@gmail.com])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects])
 
 AC_CONFIG_MACRO_DIR([m4])
