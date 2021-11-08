@@ -15,6 +15,13 @@ It's based on autotools. Execute the following
 * (optional) `make check`
 * `make install` - will install both static, shared library included header files to your system
 
+# Installation
+
+## Debian/Ubuntu
+
+* `sudo add-apt-repository ppa:haxpor/combined`
+* `sudo apt install vector_c`
+
 ## NDK-BUILD support for Android
 
 This project has support for building this library for Android.
